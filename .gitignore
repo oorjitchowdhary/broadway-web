@@ -1,0 +1,6 @@
+.env
+broadway/__pycache__
+venv/
+.vscode
+broadway/users.db
+broadway/service-account-key.json

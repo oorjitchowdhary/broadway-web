@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+<h4>{{ title }}</h4>
+<p>Posted by @{{ posted_by_user }}</p>
+<p>{{ content }}</p>
+</div>
+
+{% for comment in comments_on_post %}
+<div class="comment">
+    <p>@{{ comment.to_dict()['comment_author'] }} posted on [time]</p>
+    <p>{{ comment.to_dict()['comment'] }}</p>
+</div>
+{% endfor %}
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <p>Comment<br />
+        {{ form.comment(size=24) }}<br />
+        {% for error in form.comment.errors %}
+        <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <button class="button-primary" type="submit">Post</button>
+</form>
+{% endblock %}
