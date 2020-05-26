@@ -1,0 +1,1 @@
+web: gunicorn broadway:app --log-file=-
