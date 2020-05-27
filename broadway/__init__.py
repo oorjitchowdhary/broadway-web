@@ -77,7 +77,7 @@ def create_app():
         return User.query.get(int(user_id))
 
     @app.route('/')
-    def hello():
+    def index():
         return render_template('index.html')
     app.add_url_rule('/', endpoint='index')
 
@@ -94,6 +94,7 @@ def create_app():
                 u'name': form.name.data,
                 u'username': form.username.data,
                 u'email': form.email.data,
+                u'num_of_correct_answers': 0,
             })
 
             return redirect(url_for('login'))
@@ -133,12 +134,11 @@ def create_app():
     @app.route('/discuss/', methods=['GET', 'POST'])
     @login_required
     def discuss():
-        # show all discussions
         discussions = db.collection(u'discussions').stream()
-        # create new discussion buton for logged in user
         return render_template('discuss.html', discussions=discussions)
 
     @app.route('/discuss/<post_id>', methods=['GET', 'POST'])
+    @app.route('/discuss/<post_id>/', methods=['GET', 'POST'])
     @login_required
     def discuss_post(post_id):
         discussions = db.collection(u'discussions')
@@ -155,12 +155,41 @@ def create_app():
                 u'on_post_id': post_id,
                 u'comment_author': current_user.username,
                 u'comment': form.comment.data,
+                u'likes': 0,
+                u'liked_by': [u'superuser',],
             })
-            return redirect(url_for('discuss')+post_id)
+            return redirect(url_for('discuss') + post_id)
 
         return render_template('post.html', title=title, content=content, posted_by_user=posted_by_user, comments_on_post=comments_on_post, form=form)
 
+    @app.route('/like/<comment_id>', methods=['GET', 'POST'])
+    @login_required
+    def like_comment(comment_id):
+        comment = db.collection(u'comments').document(comment_id)
+        comment_get = comment.get().to_dict()
+        likes = comment_get['likes']
+        liked_by = comment_get['liked_by']
+        comment.update({
+            u'likes': likes+1,
+            u'liked_by': liked_by.append(current_user.username)
+            })
+        return redirect(url_for('discuss_post', post_id=comment_get['on_post_id'])
+
+    @app.route('/unlike/<comment_id>', methods=['GET', 'POST'])
+    @login_required
+    def unlike_comment(comment_id):
+        comment = db.collection(u'comments').document(comment_id)
+        comment_get = comment.get().to_dict()
+        likes = comment_get['likes']
+        liked_by = comment_get['liked_by']
+        comment.update({
+            u'likes': likes-1,
+            u'liked_by': liked_by.remove(current_user.username)
+        })
+        return redirect(url_for('discuss_post', post_id=comment_get['on_post_id']))
+
     @app.route('/discuss/new', methods=['GET', 'POST'])
+    @login_required
     def create_discussion():
         form = NewDiscussionForm()
         if form.validate_on_submit():
@@ -174,22 +203,41 @@ def create_app():
         return render_template('create_discussion.html', form=form)
 
     @app.route('/quiz', methods=['GET', 'POST'])
+    @login_required
     def quiz():
-        # create quiz button for logged in user
-        # display all available quizzes
-        return render_template('quiz.html')
-    
-    @app.route('/quiz/new')
-    def create_quiz():
-        return render_template('create_quiz.html')
+        questions = db.collection(u'quiz').stream()
+        user_doc = db.collection(u'users').document(current_user.username)
+        user_correct_answers = user_doc.get().to_dict()['num_of_correct_answers']
+        if user_correct_answers >= 8:
+            return redirect(url_for('tickets'))
+        elif user_correct_answers == 0:
+            if request.method == 'POST':
+                d = {}
+                num_correct_answers = 0
+                for q in questions:
+                    qid = q.id
+                    d = {qid: request.form[qid]}
+                    print(d)
+                    for i in d.keys():
+                        q_doc = db.collection(u'quiz').document(i).get().to_dict()
+                        if d[i] == q_doc['correct_answer']:
+                            num_correct_answers += 1
+                user_doc.update({u'num_of_correct_answers': num_correct_answers})
+                if num_correct_answers >= 8:
+                    flash(f"<i class='fa fa-check circle'></i>\tYou've answered {num_correct_answers} questions correctly.", 'flash-success')
+                    return redirect(url_for('tickets'))
+                else:
+                    flash(f"Hard luck! You answered {num_correct_answers}/10 questions correctly. Free tickets are given to people who got >= 8 questions correct.")
+                    return redirect(url_for('home'))
+        else:
+            flash("<i class='fa fa-exclamation-circle'></i>\tYou've already attempted this quiz once.", 'flash-alert')
+            return redirect(url_for('home'))
+        return render_template('quiz.html', questions=questions)
 
-    @app.route('/quiz/<int:quiz_id>', methods=['GET', 'POST'])
-    def play_quiz(quiz_id):
-        # play a selected quiz
-        # optimize firestore usage; save points in session
-        # display answer after 5 incorrect attempts
-        # update points after completing quiz
-        return render_template('play_quiz.html')
+    @app.route('/tickets', methods=['GET', 'POST'])
+    @login_required
+    def tickets():
+        return render_template('tickets.html')
     
     @app.errorhandler(404)
     def page_not_found(error):  

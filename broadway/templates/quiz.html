@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST">
+{% for question in questions %}
+<p>{{ question.to_dict()['question'] }}</p>
+{% for i in question.to_dict()['choices'] %}
+<input type="radio" value="{{ i }}" name="{{ question.id }}">{{ i }}<br>
+{% endfor %}
+{% endfor %}
+<button type="submit" class="button-primary">Submit</button>
+</form>
+{% endblock %}
