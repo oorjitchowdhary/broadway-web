@@ -1,0 +1,157 @@
+html {
+  min-height: 100vh;
+  position: relative;
+}
+
+body {
+  height: 100vh;
+  background-color: #fff;
+  font-family: 'Playfair Display', serif;
+  overflow-x: hidden;
+  color: #000;
+  z-index: 1;
+}
+
+.topnav {
+  overflow: hidden;
+  display: block;
+  background-color: #ddd;
+  width: 100%;
+}
+
+.topnav a {
+  float: right;
+  display: block;
+  color: #000;
+  text-align: center;
+  padding: 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #696969;
+  color: #fff;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {
+    display: none;
+  }
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {
+    position: relative;
+  }
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+
+.logo {
+  padding: 0;
+  margin: 5px 16px;
+  max-height: 50px;
+  float: left;
+}
+
+#logo {
+  float: left;
+  padding: 0;
+  margin: 0;
+}
+
+#logo:hover {
+  background-color: #000;
+}
+
+form input[type='text'], input[type='password'], input[type='email'] {
+    background-color: #eee;
+    border: 1px solid #ddd;
+    width: 100%;
+    color: #000;
+}
+
+input[type='radio']{
+  margin: 0;
+}
+
+.question-card {
+  padding: 25px;
+  width: 100%;
+  display: block;
+  margin: 10px auto;
+  border-radius: 10px;
+  border: 1px solid #696969;
+}
+
+.choices {
+  display: block;
+  margin: auto; 
+}
+
+input[type='radio']{
+  margin: 0 10px 0 0;
+}
+
+.card {
+  padding: 20px;
+  margin: 10px auto;
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #696969;
+}
+
+.card h4{
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover{
+  color: #333;
+}
+
+.auth-card {
+  padding: 25px 35px 10px 35px;
+  display: block;
+  margin: auto;
+  border: 2px solid #696969;
+  border-radius: 10px;
+}
+
+.auth-card p{
+  margin: 0;
+}
+
+.auth-card span {
+  margin: 0;
+}
+
+form textarea{
+  max-width: 100%;
+  resize: vertical;
+  background-color: #eee;
+  color: #000;
+  border: 1px solid #ddd;
+}

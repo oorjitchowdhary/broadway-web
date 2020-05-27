@@ -112,7 +112,7 @@ def create_app():
             if user:
                 if check_password_hash(user.password, form.password.data):
                     login_user(user)
-                    return redirect(url_for('home'))
+                    return redirect(url_for('index'))
                 else:
                     flash('Incorrect password')
             else:
@@ -219,7 +219,8 @@ def create_app():
         user_doc = db.collection(u'users').document(current_user.username)
         user_correct_answers = user_doc.get().to_dict()['num_of_correct_answers']
         if user_correct_answers >= 8:
-            return redirect(url_for('tickets'))
+            flash("You've already won the free tickets. Check your email ;)", 'flash-success')
+            return redirect(url_for('index'))
         elif user_correct_answers == 0:
             if request.method == 'POST':
                 d = {}
@@ -227,21 +228,20 @@ def create_app():
                 for q in questions:
                     qid = q.id
                     d = {qid: request.form[qid]}
-                    print(d)
                     for i in d.keys():
                         q_doc = db.collection(u'quiz').document(i).get().to_dict()
                         if d[i] == q_doc['correct_answer']:
                             num_correct_answers += 1
                 user_doc.update({u'num_of_correct_answers': num_correct_answers})
                 if num_correct_answers >= 8:
-                    flash(f"<i class='fa fa-check circle'></i>\tYou've answered {num_correct_answers} questions correctly.", 'flash-success')
-                    return redirect(url_for('tickets'))
+                    flash(f"<i class='fa fa-check circle'></i>\tYou've answered {num_correct_answers} questions correctly and won yourself 2 free tickets", 'flash-success')
+                    return redirect(url_for('index'))
                 else:
                     flash(f"Hard luck! You answered {num_correct_answers}/10 questions correctly. Free tickets are given to people who got >= 8 questions correct.")
-                    return redirect(url_for('home'))
+                    return redirect(url_for('index'))
         else:
             flash("<i class='fa fa-exclamation-circle'></i>\tYou've already attempted this quiz once.", 'flash-alert')
-            return redirect(url_for('home'))
+            return redirect(url_for('index'))
         return render_template('quiz.html', questions=questions)
 
     @app.route('/tickets', methods=['GET', 'POST'])

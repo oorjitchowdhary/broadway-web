@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block header %}
+<h1>Discussions</h1>
+{% endblock %}
 {% block content %}
 <a href="{{ url_for('create_discussion') }}"><button class="button-primary">Start a new discussion</button></a>
 {% for post in discussions %}

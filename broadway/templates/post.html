@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% block header %}
+<h1>{{ title }}</h1>
+{% endblock %}
 {% block content %}
-<div class="card">
-<h4>{{ title }}</h4>
+<div>
 <p>Posted by @{{ posted_by_user }}</p>
 {% filter markdown %}
 {{ content }}

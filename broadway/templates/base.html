@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Broadway play</title>
+  <title>Moonless Sky</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap" rel="stylesheet"/> 
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="navbar" class="topnav">
     {% if current_user.is_authenticated %}
-    <p>{{ current_user.username }}</p>
     <a href="{{ url_for('logout') }}">Log out</a>
     {% else %}
     <a href="{{ url_for('register') }}">Register</a>
     <a href="{{ url_for('login') }}">Login</a>
     {% endif %}
+    <a href="{{ url_for('index') }}" style="float: left;">Home</a>
     <a href="{{ url_for('discuss') }}">Discuss</a>
     <a href="{{ url_for('quiz') }}">Quiz</a>
+    <a href="javascript:void(0);" class="icon" onclick="responsive()"><i class="fa fa-bars"></i></a>
   </div>
     <div class="container">
+      {% block header %}{% endblock %}
       {% with messages = get_flashed_messages(with_categories=True) %}
       {% for category, message in messages %}
       <p class="{{ category }}">{{ message |safe }}</p>
       {% endfor %}
       {% endwith %}
+      <div style="display: block; margin: 10% auto;">
       {% block content %}
       {% endblock %}
+      </div>
     </div>
+    <script>
+      responsive = () => {
+       let nav = document.getElementById("navbar");
+       if (nav.className === "topnav") {
+         nav.className += " responsive";
+       } else {
+         nav.className = "topnav";
+       }
+     }
+   </script>
 </body>

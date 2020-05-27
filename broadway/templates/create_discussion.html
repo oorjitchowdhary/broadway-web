@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block header %}
+<h1>Start a new discussion</h1>
+{% endblock %}
 {% block content %}
 <form method="POST">
     <div class="row">
@@ -13,7 +16,7 @@
           {{ form.description(size=24) }}<br>
         </p>
         <p>Content<br />
-            {{ form.content(cols='35', rows='20') }}<br />
+            {{ form.content(cols='104', rows='20') }}<br />
             {% for error in form.content.errors %}
             <span style="color: red;">{{ error }}</span>
             {% endfor %}

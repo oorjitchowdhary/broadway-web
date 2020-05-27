@@ -1,11 +1,23 @@
 {% extends 'base.html' %}
+{% block header %}
+<h1>Quiz</h1>
+{% endblock %}
 {% block content %}
+<p>Play this free quiz and win yourself 2 free tickets to the Moonless Sky at any theatre near you.<br>
+    You need to get at least 8 questions correct in order to get those tickets.
+</p>
 <form method="POST">
 {% for question in questions %}
-<p>{{ question.to_dict()['question'] }}</p>
-{% for i in question.to_dict()['choices'] %}
-<input type="radio" value="{{ i }}" name="{{ question.id }}">{{ i }}<br>
-{% endfor %}
+<div class="question-card">
+    <h5>{{ question.to_dict()['question'] }}</h5>
+    <div class="row">
+    {% for i in question.to_dict()['choices'] %}
+        <div class="two columns">
+            <input type="radio" value="{{ i }}" name="{{ question.id }}">{{i}}
+        </div>
+    {% endfor %}
+    </div>
+</div>
 {% endfor %}
 <button type="submit" class="button-primary">Submit</button>
 </form>
