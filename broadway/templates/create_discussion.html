@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block header %}
-<h1>Start a new discussion</h1>
+<div class="something">
+<h1 style="margin-top: 12px;">Start a new discussion</h1>
 {% endblock %}
 {% block content %}
 <form method="POST">
@@ -23,4 +24,5 @@
         </p>
         <button class="button-primary" type="submit">Post</button>
 </form>
+</div>
 {% endblock %}

@@ -57,7 +57,7 @@ def create_app():
         content = StringField('content', widget=TextArea(), validators=[InputRequired()])
     
     class CommentForm(FlaskForm):
-        comment = StringField('comment', validators=[InputRequired()])
+        comment = StringField('comment', widget=TextArea(), validators=[InputRequired()])
 
     if not firebase_admin._apps:
         cred = credentials.Certificate({
@@ -219,7 +219,7 @@ def create_app():
         user_doc = db.collection(u'users').document(current_user.username)
         user_correct_answers = user_doc.get().to_dict()['num_of_correct_answers']
         if user_correct_answers >= 8:
-            flash("You've already won the free tickets. Check your email ;)", 'flash-success')
+            flash("<i class='fa fa-exclamation-circle'></i>\tYou've already won the free tickets. Check your email ;)", 'flash-success')
             return redirect(url_for('index'))
         elif user_correct_answers == 0:
             if request.method == 'POST':

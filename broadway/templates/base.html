@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Moonless Sky</title>
+  <title>A Moonless Sky</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}"/>
@@ -26,13 +26,11 @@
       {% block header %}{% endblock %}
       {% with messages = get_flashed_messages(with_categories=True) %}
       {% for category, message in messages %}
-      <p class="{{ category }}">{{ message |safe }}</p>
+      <p class="{{ category }}" style="font-size: 20px; margin-top: 10px;">{{ message |safe }}</p>
       {% endfor %}
       {% endwith %}
-      <div style="display: block; margin: 10% auto;">
       {% block content %}
       {% endblock %}
-      </div>
     </div>
     <script>
       responsive = () => {

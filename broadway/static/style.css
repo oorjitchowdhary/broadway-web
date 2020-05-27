@@ -126,6 +126,7 @@ input[type='radio']{
 a {
   text-decoration: none;
   color: #000;
+  font-weight: 600;
 }
 
 a:hover{
@@ -136,7 +137,7 @@ a:hover{
   padding: 25px 35px 10px 35px;
   display: block;
   margin: auto;
-  border: 2px solid #696969;
+  border: 1px solid #696969;
   border-radius: 10px;
 }
 
@@ -154,4 +155,13 @@ form textarea{
   background-color: #eee;
   color: #000;
   border: 1px solid #ddd;
+}
+
+.something {
+  display: block;
+  margin: 10% auto;
+}
+
+form p {
+  margin: 0;
 }
