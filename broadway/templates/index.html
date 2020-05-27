@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="something">
+<div class="about-section">
 <div class="six columns">
     <h1>About</h1>
     <p style="font-size: 22px;">A Moonless Sky is the first Japan-inspired Broadway Musical. It revolves around a blind protagonist who wakes up at his desk with a music player in one hand and a pen in the other. It has three playlists symbolizing three acts. Each playlist brings back some of the protagonist's memories. The use of Japanese words and kanji has been done keeping in mind the beauty, aesthetic and the homographic nature of kanji.</p>
 </div>
 <div class="six columns">
     <img style="max-width: 100%;" src="{{ url_for('static', filename='assets/piano.png') }}"/>
+</div>
+</div>
+<div class="promo">
+    <h1>Promo</h1>
+    <iframe width="1024" height="578" src="https://www.youtube.com/embed/O3gec8zzc6E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 </div>
 {% endblock %}
