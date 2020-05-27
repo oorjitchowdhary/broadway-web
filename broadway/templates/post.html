@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 <div style="font-size: 18px;">
-<p style="margin-top: 0;">Posted by @{{ posted_by_user }}</p>
+<p style="margin-top: 0;"><strong>@{{ posted_by_user }}</strong> posted on {{ time }}</p>
 {% filter markdown %}
 {{ content }}
 {% endfilter %}
@@ -12,13 +12,28 @@
 
 {% for comment in comments_on_post %}
 <div class="comment">
-    <p>@{{ comment.to_dict()['comment_author'] }} posted on [time]</p>
-    <p>{{ comment.to_dict()['comment'] }}</p>
-    {% if current_user.username in comment.to_dict()['liked_by'] %}
-    <a href="{{ url_for('unlike_comment', comment_id=comment.id) }}"><i class="fa fa-thumbs-up" style="color: green;"></i></a>
-    {% else %}
-    <a href="{{ url_for('like_comment', cid=comment.id) }}"><i class="fa fa-thumbs-up"></i></a>
-    {% endif %}
+    <div class="comment-card">
+        <div>
+            <div class="comment-title">
+                <p style="margin: 0; font-size: 16px;"><strong>@{{ comment.to_dict()['comment_author'] }}</strong> commented:</p>
+            </div>
+            <div class="react">
+                {% if current_user.username in comment.to_dict()['liked_by'] %}
+                <a href="{{ url_for('unlike_comment', comment_id=comment.id) }}"><div class="square-react" style="background-color: #333; color: #eee;"><span><i class="fa fa-thumbs-up"></i>&nbsp;Liked</span></div></a>
+                {% else %}
+                <a href="{{ url_for('like_comment', cid=comment.id) }}"><div class="square-react"><span><i class="fa fa-thumbs-up"></i>&nbsp;Like</span></div></a>
+                {% endif %}
+            </div>
+        </div>
+        <p style="margin-left: 12px; margin-bottom: 5px;">{{ comment.to_dict()['comment'] }}</p>
+        {% if comment.to_dict()['likes'] == 1 %}
+        <span>{{ comment.to_dict()['likes'] }} Like</span>
+        {% elif comment.to_dict()['likes'] == 0 %}
+        <span></span>
+        {% else %}
+        <span>{{ comment.to_dict()['likes'] }} Likes</span>
+        {% endif %}
+    </div>
 </div>
 {% endfor %}
 

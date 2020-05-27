@@ -1,4 +1,5 @@
-import os, firebase_admin, flask_login, time
+import os, firebase_admin, flask_login
+from datetime import datetime
 from flask import *
 from dotenv import load_dotenv
 from firebase_admin import auth, credentials, firestore
@@ -149,6 +150,7 @@ def create_app():
         title = post['title']
         content = post['content']
         posted_by_user = post['posted_by_user']
+        posting_time = post['posting_time']
 
         comments_on_post = db.collection(u'comments').where(u'on_post_id', u'==', post_id).stream()
 
@@ -159,12 +161,11 @@ def create_app():
                 u'comment_author': current_user.username,
                 u'comment': form.comment.data,
                 u'likes': 0,
-                u'dummy_list': [u'dummy text'],
                 u'liked_by': [i for i in range(10)],
             })
             return redirect(url_for('discuss') + post_id)
 
-        return render_template('post.html', title=title, content=content, posted_by_user=posted_by_user, comments_on_post=comments_on_post, form=form)
+        return render_template('post.html', title=title, content=content, posted_by_user=posted_by_user, comments_on_post=comments_on_post, form=form, time=posting_time)
     
     @app.route('/like/<cid>', methods=['GET', 'POST'])
     @login_required
@@ -181,6 +182,8 @@ def create_app():
             u'likes': likes+1,
             u'liked_by': liked_by,
         })
+        print(datetime.now())
+        print(datetime.now().strftime("%I %M %p, %d %B %Y"))
         return redirect(url_for('discuss_post', post_id=comment_get['on_post_id']))
 
     @app.route('/unlike/<comment_id>', methods=['GET', 'POST'])
@@ -207,6 +210,7 @@ def create_app():
                 u'description': form.description.data,
                 u'content': form.content.data,
                 u'posted_by_user': current_user.username,
+                u'posting_time': datetime.now().strftime("%I:%M %p, %d %B %Y")
             })
             return redirect(url_for('discuss'))
 

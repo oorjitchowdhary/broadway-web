@@ -1,2 +1,14 @@
-<!-- use comic sans -->
-<p>404; get outta here</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>A Moonless Sky</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+    <p style="font-family: 'Comic Sans'; font-size: 240px; text-align: center; margin: 0;">404</p>
+    <p style="font-family: 'Comic Sans'; font-size: 56px; text-align: center; margin: 0;">Page not found!</p>
+    <p style="font-family: 'Comic Sans'; font-size: 24px; text-align: center; margin: 0;">We're not able to found what you were looking for.<br><a href="{{ url_for('index') }}">Return to homepage</a></p>
+</body>
