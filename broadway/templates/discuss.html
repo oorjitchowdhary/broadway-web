@@ -1,4 +1,3 @@
-<!-- show all discussions here -->
 {% extends 'base.html' %}
 {% block content %}
 <a href="{{ url_for('create_discussion') }}"><button class="button-primary">Start a new discussion</button></a>
@@ -6,7 +5,7 @@
 <div class="card">
     <a href="{{ url_for('discuss')}}{{ post.id }}"><h4>{{ post.to_dict()['title'] }}</h4></a>
     <p>Posted by @{{ post.to_dict()['posted_by_user'] }}</p>
-    <p>{{ post.to_dict()['content'] }}</p>
+    {{ post.to_dict()['description'] }}
 </div>
 {% endfor %}
 {% endblock %}

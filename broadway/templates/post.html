@@ -3,14 +3,20 @@
 <div class="card">
 <h4>{{ title }}</h4>
 <p>Posted by @{{ posted_by_user }}</p>
-<p>{{ content }}</p>
+{% filter markdown %}
+{{ content }}
+{% endfilter %}
 </div>
 
 {% for comment in comments_on_post %}
 <div class="comment">
     <p>@{{ comment.to_dict()['comment_author'] }} posted on [time]</p>
     <p>{{ comment.to_dict()['comment'] }}</p>
-    <a href="{{ url_for('like_comment', comment_id=comment.id) }}"><i class="fa fa-thumbs-up"></i></a>
+    {% if current_user.username in comment.to_dict()['liked_by'] %}
+    <a href="{{ url_for('unlike_comment', comment_id=comment.id) }}"><i class="fa fa-thumbs-up" style="color: green;"></i></a>
+    {% else %}
+    <a href="{{ url_for('like_comment', cid=comment.id) }}"><i class="fa fa-thumbs-up"></i></a>
+    {% endif %}
 </div>
 {% endfor %}
 

@@ -17,6 +17,8 @@
     <a href="{{ url_for('register') }}">Register</a>
     <a href="{{ url_for('login') }}">Login</a>
     {% endif %}
+    <a href="{{ url_for('discuss') }}">Discuss</a>
+    <a href="{{ url_for('quiz') }}">Quiz</a>
   </div>
     <div class="container">
       {% with messages = get_flashed_messages(with_categories=True) %}

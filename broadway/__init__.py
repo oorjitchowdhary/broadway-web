@@ -4,11 +4,12 @@ from dotenv import load_dotenv
 from firebase_admin import auth, credentials, firestore
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, PasswordField
+from wtforms.widgets.core import TextArea
 from wtforms.validators import Email, Length, InputRequired, ValidationError
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, logout_user, login_user, current_user, UserMixin
-
+from flaskext.markdown import Markdown
 def create_app():
     load_dotenv()
     base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -19,6 +20,7 @@ def create_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'login'
+    Markdown(app)
 
     class User(UserMixin, sql_db.Model):
         id = sql_db.Column(sql_db.Integer, primary_key=True)
@@ -51,7 +53,8 @@ def create_app():
 
     class NewDiscussionForm(FlaskForm):
         title = StringField('title', validators=[InputRequired(), Length(max=60)])
-        content = StringField('content', validators=[InputRequired()])
+        description = StringField('description', validators=[Length(max=60)])
+        content = StringField('content', widget=TextArea(), validators=[InputRequired()])
     
     class CommentForm(FlaskForm):
         comment = StringField('comment', validators=[InputRequired()])
@@ -156,24 +159,29 @@ def create_app():
                 u'comment_author': current_user.username,
                 u'comment': form.comment.data,
                 u'likes': 0,
-                u'liked_by': [u'superuser',],
+                u'dummy_list': [u'dummy text'],
+                u'liked_by': [i for i in range(10)],
             })
             return redirect(url_for('discuss') + post_id)
 
         return render_template('post.html', title=title, content=content, posted_by_user=posted_by_user, comments_on_post=comments_on_post, form=form)
-
-    @app.route('/like/<comment_id>', methods=['GET', 'POST'])
+    
+    @app.route('/like/<cid>', methods=['GET', 'POST'])
     @login_required
-    def like_comment(comment_id):
-        comment = db.collection(u'comments').document(comment_id)
+    def like_comment(cid):
+        comment = db.collection(u'comments').document(cid)
         comment_get = comment.get().to_dict()
         likes = comment_get['likes']
         liked_by = comment_get['liked_by']
+        for i in liked_by:
+            if type(i) == int:
+                liked_by.clear()
+        liked_by.append(current_user.username)
         comment.update({
             u'likes': likes+1,
-            u'liked_by': liked_by.append(current_user.username)
-            })
-        return redirect(url_for('discuss_post', post_id=comment_get['on_post_id'])
+            u'liked_by': liked_by,
+        })
+        return redirect(url_for('discuss_post', post_id=comment_get['on_post_id']))
 
     @app.route('/unlike/<comment_id>', methods=['GET', 'POST'])
     @login_required
@@ -182,9 +190,10 @@ def create_app():
         comment_get = comment.get().to_dict()
         likes = comment_get['likes']
         liked_by = comment_get['liked_by']
+        liked_by.remove(current_user.username)
         comment.update({
             u'likes': likes-1,
-            u'liked_by': liked_by.remove(current_user.username)
+            u'liked_by': liked_by,
         })
         return redirect(url_for('discuss_post', post_id=comment_get['on_post_id']))
 
@@ -195,6 +204,7 @@ def create_app():
         if form.validate_on_submit():
             db.collection(u'discussions').add({
                 u'title': form.title.data,
+                u'description': form.description.data,
                 u'content': form.content.data,
                 u'posted_by_user': current_user.username,
             })
