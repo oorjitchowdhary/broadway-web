@@ -241,7 +241,7 @@ def create_app():
                     flash(f"<i class='fa fa-check circle'></i>\tYou've answered {num_correct_answers} questions correctly and won yourself 2 free tickets", 'flash-success')
                     return redirect(url_for('index'))
                 else:
-                    flash(f"Hard luck! You answered {num_correct_answers}/10 questions correctly. Free tickets are given to people who got >= 8 questions correct.")
+                    flash(f"Hard luck! You answered {num_correct_answers}/10 questions correctly. Free tickets are given to people who got 8 questions or more correct.")
                     return redirect(url_for('index'))
         else:
             flash("<i class='fa fa-exclamation-circle'></i>\tYou've already attempted this quiz once.", 'flash-alert')

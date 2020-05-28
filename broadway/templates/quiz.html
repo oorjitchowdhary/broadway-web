@@ -6,6 +6,7 @@
 <p>Play this free quiz and win yourself 2 free tickets to the Moonless Sky at any theatre near you.<br>
     You need to get at least 8 questions correct in order to get those tickets.
 </p>
+<div class="row">
 <form method="POST">
 {% for question in questions %}
 <div class="question-card">
@@ -21,4 +22,5 @@
 {% endfor %}
 <button type="submit" class="button-primary">Submit</button>
 </form>
+</div>
 {% endblock %}

@@ -7,8 +7,10 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 </head>
-<body>
-    <p style="font-family: 'Comic Sans'; font-size: 240px; text-align: center; margin: 0;">404</p>
-    <p style="font-family: 'Comic Sans'; font-size: 56px; text-align: center; margin: 0;">Page not found!</p>
-    <p style="font-family: 'Comic Sans'; font-size: 24px; text-align: center; margin: 0;">We're not able to found what you were looking for.<br><a href="{{ url_for('index') }}">Return to homepage</a></p>
+<body style="overflow: hidden;">
+  <div style="display: block; margin: 3% auto;">
+    <p style="font-family: 'Comic Sans'; font-size: 200px; text-align: center; margin: 0; line-height: initial;">404</p>
+    <p style="font-family: 'Comic Sans'; font-size: 56px; text-align: center; margin: 0; line-height: initial;">Page not found!</p>
+    <p style="font-family: 'Comic Sans'; font-size: 24px; text-align: center; margin: 0;">We're unable to find what you were looking for.<br><a href="{{ url_for('index') }}">Return to homepage</a></p>
+  </div>
 </body>
