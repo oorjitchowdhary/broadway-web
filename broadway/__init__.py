@@ -1,5 +1,6 @@
-import os, firebase_admin, flask_login
+import os, firebase_admin, flask_login, pytz
 from datetime import datetime
+from pytz import timezone
 from flask import *
 from dotenv import load_dotenv
 from firebase_admin import auth, credentials, firestore
@@ -182,8 +183,6 @@ def create_app():
             u'likes': likes+1,
             u'liked_by': liked_by,
         })
-        print(datetime.now())
-        print(datetime.now().strftime("%I %M %p, %d %B %Y"))
         return redirect(url_for('discuss_post', post_id=comment_get['on_post_id']))
 
     @app.route('/unlike/<comment_id>', methods=['GET', 'POST'])
@@ -210,7 +209,7 @@ def create_app():
                 u'description': form.description.data,
                 u'content': form.content.data,
                 u'posted_by_user': current_user.username,
-                u'posting_time': datetime.now().strftime("%I:%M %p, %d %B %Y")
+                u'posting_time': datetime.now(timezone('Asia/Calcutta')).strftime("%I:%M %p, %d %B %Y")
             })
             return redirect(url_for('discuss'))
 
@@ -222,8 +221,8 @@ def create_app():
         questions = db.collection(u'quiz').stream()
         user_doc = db.collection(u'users').document(current_user.username)
         user_correct_answers = user_doc.get().to_dict()['num_of_correct_answers']
-        if user_correct_answers >= 8:
-            flash("<i class='fa fa-exclamation-circle'></i>\tYou've already won the free tickets. Check your email ;)", 'flash-success')
+        if user_correct_answers >= 3:
+            flash("<i class='fa fa-exclamation-circle'></i>\tYou've already won the free tickets.", 'flash-success')
             return redirect(url_for('index'))
         elif user_correct_answers == 0:
             if request.method == 'POST':
@@ -237,11 +236,11 @@ def create_app():
                         if d[i] == q_doc['correct_answer']:
                             num_correct_answers += 1
                 user_doc.update({u'num_of_correct_answers': num_correct_answers})
-                if num_correct_answers >= 8:
-                    flash(f"<i class='fa fa-check circle'></i>\tYou've answered {num_correct_answers} questions correctly and won yourself 2 free tickets", 'flash-success')
+                if num_correct_answers >= 3:
+                    flash(f"<i class='fa fa-check circle'></i>\tCongratulations! You've just won 2 free tickets. Check your email for more details.", 'flash-success')
                     return redirect(url_for('index'))
                 else:
-                    flash(f"Hard luck! You answered {num_correct_answers}/10 questions correctly. Free tickets are given to people who got 8 questions or more correct.")
+                    flash(f"Hard luck! You answered {num_correct_answers} questions correctly. Free tickets are given to people who got 3 questions or more correct.")
                     return redirect(url_for('index'))
         else:
             flash("<i class='fa fa-exclamation-circle'></i>\tYou've already attempted this quiz once.", 'flash-alert')
