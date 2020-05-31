@@ -88,6 +88,7 @@ def create_app():
 
     @app.route('/register', methods=['GET', 'POST'])
     def register():
+        '''
         form = RegisterForm()
         if form.validate_on_submit():
             hashed_password = generate_password_hash(form.password.data, method='sha256')
@@ -103,8 +104,8 @@ def create_app():
             })
 
             return redirect(url_for('login'))
-
-        return render_template('register.html', form=form)
+        '''
+        return redirect(url_for('index'))
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
