@@ -12,16 +12,16 @@
 <body>
   <div id="navbar" class="topnav">
     {% if current_user.is_authenticated %}
-    <a href="{{ url_for('logout') }}">Log out</a>
+    <a href="{{ url_for('auth.logout') }}">Log out</a>
     {% else %}
-    <a href="{{ url_for('register') }}">Register</a>
-    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('auth.register') }}">Register</a>
+    <a href="{{ url_for('auth.login') }}">Login</a>
     {% endif %}
     <div class="home-nav-btn">
     <a href="{{ url_for('index') }}">Home</a>
     </div>
-    <a href="{{ url_for('discuss') }}">Discuss</a>
-    <a href="{{ url_for('quiz') }}">Quiz</a>
+    <a href="{{ url_for('discussion.discuss') }}">Discuss</a>
+    <a href="{{ url_for('quiz.quiz') }}">Quiz</a>
     <a href="javascript:void(0);" class="icon" onclick="responsive()"><i class="fa fa-bars"></i></a>
   </div>
     <div class="container">

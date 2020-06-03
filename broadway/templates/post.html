@@ -19,9 +19,9 @@
             </div>
             <div class="react">
                 {% if current_user.username in comment.to_dict()['liked_by'] %}
-                <a href="{{ url_for('unlike_comment', comment_id=comment.id) }}"><div class="square-react" style="background-color: #333; color: #eee;"><span><i class="fa fa-thumbs-up"></i>&nbsp;Liked</span></div></a>
+                <a href="{{ url_for('discussion.unlike_comment', comment_id=comment.id) }}"><div class="square-react" style="background-color: #333; color: #eee;"><span><i class="fa fa-thumbs-up"></i>&nbsp;Liked</span></div></a>
                 {% else %}
-                <a href="{{ url_for('like_comment', cid=comment.id) }}"><div class="square-react"><span><i class="fa fa-thumbs-up"></i>&nbsp;Like</span></div></a>
+                <a href="{{ url_for('discussion.like_comment', cid=comment.id) }}"><div class="square-react"><span><i class="fa fa-thumbs-up"></i>&nbsp;Like</span></div></a>
                 {% endif %}
             </div>
         </div>
